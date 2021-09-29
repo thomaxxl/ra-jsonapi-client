@@ -45,6 +45,7 @@ export default (apiUrl, userSettings = {}) => (type, resource, params) => {
       const query = {
         'page[number]': page,
         'page[size]': perPage,
+        'page[limit]': perPage
       };
 
       // Add all filter params to query.
@@ -75,6 +76,7 @@ export default (apiUrl, userSettings = {}) => (type, resource, params) => {
       break;
 
     case UPDATE: {
+
       url = `${apiUrl}/${resource}/${params.id}`;
 
       const attributes = params.data;
@@ -83,7 +85,7 @@ export default (apiUrl, userSettings = {}) => (type, resource, params) => {
       const data = {
         data: {
           id: params.id,
-          type: resource,
+          type: params.type ? params.type: resource,
           attributes,
         },
       };
@@ -96,6 +98,7 @@ export default (apiUrl, userSettings = {}) => (type, resource, params) => {
     case DELETE:
       url = `${apiUrl}/${resource}/${params.id}`;
       options.method = 'DELETE';
+      options["data"] = {}
       break;
 
     case GET_MANY: {
@@ -108,7 +111,7 @@ export default (apiUrl, userSettings = {}) => (type, resource, params) => {
     }
 
     case GET_MANY_REFERENCE: {
-      const { page, perPage } = params.pagination;
+      const { page, perPage } = params?.pagination ;
 
       // Create query with pagination params.
       const query = {
