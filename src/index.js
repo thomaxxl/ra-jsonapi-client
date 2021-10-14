@@ -64,7 +64,7 @@ export default (apiUrl, userSettings = {}) => (type, resource, params) => {
     }
 
     case GET_ONE:
-      url = `${apiUrl}/${resource}/${params.id}`;
+      url = `${apiUrl}/${resource}/${params.id}?%2Ball`;
       break;
 
     case CREATE:
@@ -181,10 +181,12 @@ export default (apiUrl, userSettings = {}) => (type, resource, params) => {
 
         case GET_ONE: {
           const { id, attributes } = response.data.data;
+          const relationships = response.data.data?.relationships ? response.data.data.relationships : {}
+          const attrs_rels = Object.assign({}, attributes, relationships, { "relationships" : relationships} )
 
           return {
             data: {
-              id, ...attributes,
+              id, ...attrs_rels,
             },
           };
         }
